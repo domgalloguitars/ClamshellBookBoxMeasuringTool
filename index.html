@@ -31,7 +31,7 @@
             <label>Board Thickness:</label> <input type="number" id="board" value="3"> <span class="unit">mm</span>
         </div>
         <button onclick="calculate()">Generate Diagram</button>
-        <canvas id="diagram" width="800" height="600"></canvas>
+        <canvas id="diagram" width="900" height="600"></canvas>
     </div>
 
     <script>
@@ -42,12 +42,12 @@
             const board = parseFloat(document.getElementById('board').value);
 
             const ctx = document.getElementById('diagram').getContext('2d');
-            ctx.clearRect(0, 0, 800, 600);
+            ctx.clearRect(0, 0, 900, 600);
             ctx.font = "14px Arial";
             ctx.fillStyle = "black";
 
             // Auto-scale if dimensions are too large
-            const scale = Math.min(600 / (bal + 100), 400 / (bah + 100), 1);
+            const scale = Math.min(500 / (bal + 100), 350 / (bah + 100), 1);
 
             function drawRect(x, y, width, height, label) {
                 ctx.strokeRect(x, y, width * scale, height * scale);
@@ -56,21 +56,21 @@
 
             let xStart = 50, yStart = 50;
 
-            // Bottom Tray
-            drawRect(xStart, yStart, bal, baw, "BT1");
-            drawRect(xStart, yStart + (baw + 20) * scale, baw, bah + board, "BT2");
-            drawRect(xStart + (baw + 20) * scale, yStart + (baw + 20) * scale, bal, bah + board, "BT3");
+            // Bottom Tray (left side)
+            drawRect(xStart, yStart, baw, bah + board, "BT2"); // Short side
+            drawRect(xStart, yStart + (bah + board + 20) * scale, bal, baw, "BT1"); // Flat base
+            drawRect(xStart + (bal + 20) * scale, yStart + (bah + board + 20) * scale, bal, bah + board, "BT3"); // Long side
 
-            // Top Tray
-            let yOffset = yStart + (baw + bah + 60) * scale;
-            drawRect(xStart, yOffset, bal, baw, "TT1");
-            drawRect(xStart, yOffset + (baw + 20) * scale, baw, bah + board, "TT2");
-            drawRect(xStart + (baw + 20) * scale, yOffset + (baw + 20) * scale, bal, bah + board, "TT3");
+            // Top Tray (next to Bottom Tray)
+            let xOffset = xStart + (bal + 100) * scale;
+            drawRect(xOffset, yStart, baw, bah + board, "TT2"); // Short side
+            drawRect(xOffset, yStart + (bah + board + 20) * scale, bal, baw, "TT1"); // Flat base
+            drawRect(xOffset + (bal + 20) * scale, yStart + (bah + board + 20) * scale, bal, bah + board, "TT3"); // Long side
 
-            // Cover
-            let coverX = xStart + (bal + 100) * scale, coverY = yStart;
-            drawRect(coverX, coverY, bal + 2 * board, baw + 2 * board, "C");
-            drawRect(coverX, coverY + (baw + 60) * scale, board, bah + 2 * board, "CS"); // Fixed spine height
+            // Cover pieces (right side)
+            let coverX = xOffset + (bal + 100) * scale, coverY = yStart;
+            drawRect(coverX, coverY, bal + 2 * board, baw + 2 * board, "C"); // Cover
+            drawRect(coverX, coverY + (baw + 60) * scale, board, bah + 2 * board, "CS"); // Spine (fixed height)
         }
     </script>
 
