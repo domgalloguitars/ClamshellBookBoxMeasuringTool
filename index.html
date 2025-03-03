@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clamshell Box Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { width: 80%; margin: auto; }
+        input { width: 80px; margin: 5px; }
+        canvas { border: 1px solid black; }
+    </style>
+</head>
+<body>
+
+    <h1>Clamshell Box Calculator</h1>
+    <div class="container">
+        <label>Book Height (BAH):</label> <input type="number" id="bah" value="200"><br>
+        <label>Book Length (BAL):</label> <input type="number" id="bal" value="150"><br>
+        <label>Book Width (BAW):</label> <input type="number" id="baw" value="50"><br>
+        <label>Board Thickness:</label> <input type="number" id="board" value="3"><br>
+        <button onclick="calculate()">Generate Diagram</button>
+        <canvas id="diagram" width="500" height="400"></canvas>
+    </div>
+
+    <script>
+        function calculate() {
+            const bah = parseFloat(document.getElementById('bah').value);
+            const bal = parseFloat(document.getElementById('bal').value);
+            const baw = parseFloat(document.getElementById('baw').value);
+            const board = parseFloat(document.getElementById('board').value);
+            
+            const ctx = document.getElementById('diagram').getContext('2d');
+            ctx.clearRect(0, 0, 500, 400);
+
+            ctx.font = "14px Arial";
+            ctx.fillStyle = "black";
+
+            // Draw Bottom Tray
+            ctx.strokeRect(50, 50, bal, baw);
+            ctx.fillText(`Bottom Tray: ${bal} x ${baw}`, 50, 45);
+
+            // Draw Short Side
+            ctx.strokeRect(50, 120, baw, bah + board);
+            ctx.fillText(`Short Side: ${baw} x ${bah + board}`, 50, 115);
+
+            // Draw Long Side
+            ctx.strokeRect(200, 120, bal, bah + board);
+            ctx.fillText(`Long Side: ${bal} x ${bah + board}`, 200, 115);
+
+            // Draw Outer Case (3 pieces)
+            ctx.strokeRect(350, 50, bal + 2 * board, baw + 2 * board);
+            ctx.fillText(`Outer Case: ${bal + 2 * board} x ${baw + 2 * board}`, 350, 45);
+
+            ctx.strokeRect(350, 120, bal, bah + 2 * board);
+            ctx.fillText(`Outer Side: ${bal} x ${bah + 2 * board}`, 350, 115);
+
+            ctx.strokeRect(350, 190, board, bah + 2 * board);
+            ctx.fillText(`Spine: ${board} x ${bah + 2 * board}`, 350, 185);
+        }
+    </script>
+
+</body>
+</html>
