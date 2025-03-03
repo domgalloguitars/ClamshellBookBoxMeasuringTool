@@ -11,7 +11,7 @@
         input { width: 80px; }
         label { margin-right: 5px; }
         .unit { margin-left: 5px; }
-        canvas { border: 1px solid black; margin-top: 20px; }
+        canvas { border: 1px solid black; margin-top: 20px; background: white; }
     </style>
 </head>
 <body>
@@ -31,7 +31,7 @@
             <label>Board Thickness:</label> <input type="number" id="board" value="3"> <span class="unit">mm</span>
         </div>
         <button onclick="calculate()">Generate Diagram</button>
-        <canvas id="diagram" width="900" height="900"></canvas>
+        <canvas id="diagram" width="800" height="800"></canvas>
     </div>
 
     <script>
@@ -42,12 +42,13 @@
             const board = parseFloat(document.getElementById('board').value);
 
             const ctx = document.getElementById('diagram').getContext('2d');
-            ctx.clearRect(0, 0, 900, 900);
+            ctx.clearRect(0, 0, 800, 800);
             ctx.font = "14px Arial";
             ctx.fillStyle = "black";
+            ctx.strokeStyle = "black";
 
-            // Auto-scale if dimensions are too large
-            const scale = Math.min(500 / (bal + 100), 350 / (bah + 100), 1);
+            // Scale factor to fit large dimensions in the canvas
+            const scale = Math.min(600 / (bal + 100), 500 / (bah + 100), 1);
 
             function drawRect(x, y, width, height, label) {
                 ctx.strokeRect(x, y, width * scale, height * scale);
@@ -58,11 +59,23 @@
 
             // Bottom Tray (Top Section)
             drawRect(xStart, yStart, baw, bah + board, "BT2"); // Short side
-            drawRect(xStart, yStart + (bah + board + 20) * scale, baw, bal, "BT1"); // Flat base (flipped)
-            drawRect(xStart + (baw + 20) * scale, yStart + (bah + board + 20) * scale, bah + board, bal, "BT3"); // Long side (flipped)
+            drawRect(xStart, yStart + (bah + board + 20) * scale, bal, baw, "BT1"); // Flat base (rotated)
+            drawRect(xStart + (baw + 20) * scale, yStart + (bah + board + 20) * scale, bal, bah + board, "BT3"); // Long side (rotated)
 
             // Top Tray (Below Bottom Tray)
             let yOffset = yStart + (bal + bah + board + 60) * scale;
             drawRect(xStart, yOffset, baw, bah + board, "TT2"); // Short side
-            drawRect(xStart, yOffset + (bah + board + 20) * scale, baw, bal, "TT1"); // Flat base (flipped)
-            drawRect(xStart + (baw + 20) * scale, yOffset + (bah + board + 20) * scale, bah + board, 
+            drawRect(xStart, yOffset + (bah + board + 20) * scale, bal, baw, "TT1"); // Flat base (rotated)
+            drawRect(xStart + (baw + 20) * scale, yOffset + (bah + board + 20) * scale, bal, bah + board, "TT3"); // Long side (rotated)
+
+            // Cover & Spine (Right Side)
+            let coverX = xStart + (baw + 100) * scale, coverY = yStart;
+            drawRect(coverX, coverY, bal + 2 * board, baw + 2 * board, "C"); // Cover (rotated)
+
+            let spineX = coverX + (bal + 50) * scale, spineY = coverY;
+            drawRect(spineX, spineY, bal + 2 * board, bah + 2 * board, "CS"); // Spine (rotated & fixed)
+        }
+    </script>
+
+</body>
+</html>
