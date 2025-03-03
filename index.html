@@ -1,39 +1,78 @@
-<script>
-    function calculate() {
-        const bah = parseFloat(document.getElementById('bah').value);
-        const bal = parseFloat(document.getElementById('bal').value);
-        const baw = parseFloat(document.getElementById('baw').value);
-        const board = parseFloat(document.getElementById('board').value);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clamshell Box Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { width: 80%; margin: auto; }
+        .input-group { margin: 5px; }
+        input { width: 80px; }
+        label { margin-right: 5px; }
+        .unit { margin-left: 5px; }
+        canvas { border: 1px solid black; margin-top: 20px; }
+    </style>
+</head>
+<body>
 
-        const ctx = document.getElementById('diagram').getContext('2d');
-        ctx.clearRect(0, 0, 800, 800);
-        ctx.font = "14px Arial";
-        ctx.fillStyle = "black";
-        ctx.strokeStyle = "black";
+    <h1>Clamshell Box Calculator</h1>
+    <div class="container">
+        <div class="input-group">
+            <label>Book Height:</label> <input type="number" id="bah" value="200"> <span class="unit">mm</span>
+        </div>
+        <div class="input-group">
+            <label>Book Length:</label> <input type="number" id="bal" value="150"> <span class="unit">mm</span>
+        </div>
+        <div class="input-group">
+            <label>Book Width:</label> <input type="number" id="baw" value="50"> <span class="unit">mm</span>
+        </div>
+        <div class="input-group">
+            <label>Board Thickness:</label> <input type="number" id="board" value="3"> <span class="unit">mm</span>
+        </div>
+        <button onclick="calculate()">Generate Diagram</button>
+        <canvas id="diagram" width="900" height="600"></canvas>
+    </div>
 
-        function drawRect(x, y, width, height, label) {
-            ctx.strokeRect(x, y, width, height);
-            ctx.fillText(`${label}: ${width} x ${height} mm`, x + 5, y + 15);
+    <script>
+        function calculate() {
+            const bah = parseFloat(document.getElementById('bah').value);
+            const bal = parseFloat(document.getElementById('bal').value);
+            const baw = parseFloat(document.getElementById('baw').value);
+            const board = parseFloat(document.getElementById('board').value);
+
+            const ctx = document.getElementById('diagram').getContext('2d');
+            ctx.clearRect(0, 0, 900, 600);
+            ctx.font = "14px Arial";
+            ctx.fillStyle = "black";
+
+            // Auto-scale if dimensions are too large
+            const scale = Math.min(500 / (bal + 100), 350 / (bah + 100), 1);
+
+            function drawRect(x, y, width, height, label) {
+                ctx.strokeRect(x, y, width * scale, height * scale);
+                ctx.fillText(`${label}: ${width} x ${height} mm`, x, y - 5);
+            }
+
+            let xStart = 50, yStart = 50;
+
+            // Bottom Tray (left side)
+            drawRect(xStart, yStart, baw, bah + board, "BT2"); // Short side
+            drawRect(xStart, yStart + (bah + board + 20) * scale, baw, bal, "BT1"); // Flat base (flipped)
+            drawRect(xStart + (baw + 20) * scale, yStart + (bah + board + 20) * scale, bah + board, bal, "BT3"); // Long side (flipped)
+
+            // Top Tray (next to Bottom Tray)
+            let xOffset = xStart + (baw + 100) * scale;
+            drawRect(xOffset, yStart, baw, bah + board, "TT2"); // Short side
+            drawRect(xOffset, yStart + (bah + board + 20) * scale, baw, bal, "TT1"); // Flat base (flipped)
+            drawRect(xOffset + (baw + 20) * scale, yStart + (bah + board + 20) * scale, bah + board, bal, "TT3"); // Long side (flipped)
+
+            // Cover pieces (right side)
+            let coverX = xOffset + (baw + 100) * scale, coverY = yStart;
+            drawRect(coverX, coverY, bal + 2 * board, baw + 2 * board, "C"); // Cover
+            drawRect(coverX, coverY + (baw + 60) * scale, board, bah + 2 * board, "CS"); // Spine (fixed height)
         }
+    </script>
 
-        let xStart = 50, yStart = 50;
-
-        // Bottom Tray (Top Section)
-        drawRect(xStart, yStart, baw, bah + board, "BT2"); // Short side
-        drawRect(xStart, yStart + (bah + board + 20), bal, baw, "BT1"); // Flat base (rotated)
-        drawRect(xStart + (baw + 20), yStart + (bah + board + 20), bal, bah + board, "BT3"); // Long side (rotated)
-
-        // Top Tray (Below Bottom Tray)
-        let yOffset = yStart + (bal + bah + board + 60);
-        drawRect(xStart, yOffset, baw, bah + board, "TT2"); // Short side
-        drawRect(xStart, yOffset + (bah + board + 20), bal, baw, "TT1"); // Flat base (rotated)
-        drawRect(xStart + (baw + 20), yOffset + (bah + board + 20), bal, bah + board, "TT3"); // Long side (rotated)
-
-        // Cover & Spine (Right Side)
-        let coverX = xStart + (baw + 100), coverY = yStart;
-        drawRect(coverX, coverY, bal + 2 * board, baw + 2 * board, "C"); // Cover (rotated)
-
-        let spineX = coverX + (bal + 50), spineY = coverY;
-        drawRect(spineX, spineY, bal + 2 * board, bah + 2 * board, "CS"); // Spine (rotated & fixed)
-    }
-</script>
+</body>
+</html>
