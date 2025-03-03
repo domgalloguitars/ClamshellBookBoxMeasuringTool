@@ -7,7 +7,10 @@
     <style>
         body { font-family: Arial, sans-serif; text-align: center; }
         .container { width: 80%; margin: auto; }
-        input { width: 80px; margin: 5px; }
+        .input-group { margin: 5px; }
+        input { width: 80px; }
+        label { margin-right: 5px; }
+        .unit { margin-left: 5px; }
         canvas { border: 1px solid black; margin-top: 20px; }
     </style>
 </head>
@@ -15,12 +18,20 @@
 
     <h1>Clamshell Box Calculator</h1>
     <div class="container">
-        <label>Book Height (BAH):</label> <input type="number" id="bah" value="200"><br>
-        <label>Book Length (BAL):</label> <input type="number" id="bal" value="150"><br>
-        <label>Book Width (BAW):</label> <input type="number" id="baw" value="50"><br>
-        <label>Board Thickness:</label> <input type="number" id="board" value="3"><br>
+        <div class="input-group">
+            <label>Book Height:</label> <input type="number" id="bah" value="200"> <span class="unit">mm</span>
+        </div>
+        <div class="input-group">
+            <label>Book Length:</label> <input type="number" id="bal" value="150"> <span class="unit">mm</span>
+        </div>
+        <div class="input-group">
+            <label>Book Width:</label> <input type="number" id="baw" value="50"> <span class="unit">mm</span>
+        </div>
+        <div class="input-group">
+            <label>Board Thickness:</label> <input type="number" id="board" value="3"> <span class="unit">mm</span>
+        </div>
         <button onclick="calculate()">Generate Diagram</button>
-        <canvas id="diagram" width="600" height="500"></canvas>
+        <canvas id="diagram" width="800" height="600"></canvas>
     </div>
 
     <script>
@@ -31,31 +42,35 @@
             const board = parseFloat(document.getElementById('board').value);
 
             const ctx = document.getElementById('diagram').getContext('2d');
-            ctx.clearRect(0, 0, 600, 500);
+            ctx.clearRect(0, 0, 800, 600);
             ctx.font = "14px Arial";
             ctx.fillStyle = "black";
 
+            // Auto-scale if dimensions are too large
+            const scale = Math.min(600 / (bal + 100), 400 / (bah + 100), 1);
+
+            function drawRect(x, y, width, height, label) {
+                ctx.strokeRect(x, y, width * scale, height * scale);
+                ctx.fillText(`${label}: ${width} x ${height} mm`, x, y - 5);
+            }
+
+            let xStart = 50, yStart = 50;
+
             // Bottom Tray
-            ctx.strokeRect(50, 50, bal, baw);
-            ctx.fillText(`BT1: ${bal} x ${baw}`, 50, 45);
-            ctx.strokeRect(50, 110, baw, bah + board);
-            ctx.fillText(`BT2: ${baw} x ${bah + board}`, 50, 105);
-            ctx.strokeRect(200, 110, bal, bah + board);
-            ctx.fillText(`BT3: ${bal} x ${bah + board}`, 200, 105);
+            drawRect(xStart, yStart, bal, baw, "BT1");
+            drawRect(xStart, yStart + (baw + 20) * scale, baw, bah + board, "BT2");
+            drawRect(xStart + (baw + 20) * scale, yStart + (baw + 20) * scale, bal, bah + board, "BT3");
 
             // Top Tray
-            ctx.strokeRect(50, 200, bal, baw);
-            ctx.fillText(`TT1: ${bal} x ${baw}`, 50, 195);
-            ctx.strokeRect(50, 260, baw, bah + board);
-            ctx.fillText(`TT2: ${baw} x ${bah + board}`, 50, 255);
-            ctx.strokeRect(200, 260, bal, bah + board);
-            ctx.fillText(`TT3: ${bal} x ${bah + board}`, 200, 255);
+            let yOffset = yStart + (baw + bah + 60) * scale;
+            drawRect(xStart, yOffset, bal, baw, "TT1");
+            drawRect(xStart, yOffset + (baw + 20) * scale, baw, bah + board, "TT2");
+            drawRect(xStart + (baw + 20) * scale, yOffset + (baw + 20) * scale, bal, bah + board, "TT3");
 
             // Cover
-            ctx.strokeRect(350, 50, bal + 2 * board, baw + 2 * board);
-            ctx.fillText(`C: ${bal + 2 * board} x ${baw + 2 * board}`, 350, 45);
-            ctx.strokeRect(350, 110, board, bah + 2 * board);
-            ctx.fillText(`CS: ${board} x ${bah + 2 * board}`, 350, 105);
+            let coverX = xStart + (bal + 100) * scale, coverY = yStart;
+            drawRect(coverX, coverY, bal + 2 * board, baw + 2 * board, "C");
+            drawRect(coverX, coverY + (baw + 60) * scale, board, bah + 2 * board, "CS"); // Fixed spine height
         }
     </script>
 
