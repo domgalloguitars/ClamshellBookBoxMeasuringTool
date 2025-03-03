@@ -58,17 +58,17 @@
 
             // Bottom Tray (left side)
             drawRect(xStart, yStart, baw, bah + board, "BT2"); // Short side
-            drawRect(xStart, yStart + (bah + board + 20) * scale, bal, baw, "BT1"); // Flat base
-            drawRect(xStart + (bal + 20) * scale, yStart + (bah + board + 20) * scale, bal, bah + board, "BT3"); // Long side
+            drawRect(xStart, yStart + (bah + board + 20) * scale, baw, bal, "BT1"); // Flat base (flipped)
+            drawRect(xStart + (baw + 20) * scale, yStart + (bah + board + 20) * scale, bah + board, bal, "BT3"); // Long side (flipped)
 
             // Top Tray (next to Bottom Tray)
-            let xOffset = xStart + (bal + 100) * scale;
+            let xOffset = xStart + (baw + 100) * scale;
             drawRect(xOffset, yStart, baw, bah + board, "TT2"); // Short side
-            drawRect(xOffset, yStart + (bah + board + 20) * scale, bal, baw, "TT1"); // Flat base
-            drawRect(xOffset + (bal + 20) * scale, yStart + (bah + board + 20) * scale, bal, bah + board, "TT3"); // Long side
+            drawRect(xOffset, yStart + (bah + board + 20) * scale, baw, bal, "TT1"); // Flat base (flipped)
+            drawRect(xOffset + (baw + 20) * scale, yStart + (bah + board + 20) * scale, bah + board, bal, "TT3"); // Long side (flipped)
 
             // Cover pieces (right side)
-            let coverX = xOffset + (bal + 100) * scale, coverY = yStart;
+            let coverX = xOffset + (baw + 100) * scale, coverY = yStart;
             drawRect(coverX, coverY, bal + 2 * board, baw + 2 * board, "C"); // Cover
             drawRect(coverX, coverY + (baw + 60) * scale, board, bah + 2 * board, "CS"); // Spine (fixed height)
         }
