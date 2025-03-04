@@ -3,51 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clamshell Box Calculator</title>
+    <title>Book Box Layout</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        .container { width: 80%; margin: auto; }
-        .input-group { margin: 5px; }
-        input { width: 80px; }
-        label { margin-right: 5px; }
-        .unit { margin-left: 5px; }
+        body { font-family: Arial, sans-serif; }
+        .container { display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
+        label, input { margin: 5px; }
         canvas { border: 1px solid black; margin-top: 20px; }
     </style>
 </head>
 <body>
-
-    <h1>Clamshell Box Calculator</h1>
     <div class="container">
-        <div class="input-group">
-            <label>Book Height:</label> <input type="number" id="bah" value="15"> <span class="unit">mm</span>
-        </div>
-        <div class="input-group">
-            <label>Book Length:</label> <input type="number" id="bal" value="148"> <span class="unit">mm</span>
-        </div>
-        <div class="input-group">
-            <label>Book Width:</label> <input type="number" id="baw" value="105"> <span class="unit">mm</span>
-        </div>
-        <div class="input-group">
-            <label>Board Thickness:</label> <input type="number" id="board" value="2"> <span class="unit">mm</span>
-        </div>
-        <button onclick="calculate()">Generate Diagram</button>
-        <canvas id="diagram" width="900" height="600"></canvas>
+        <h2>Book Box Layout Calculator</h2>
+        <label>Book Height (A1): <input type="number" id="bah" value="15"></label>
+        <label>Book Length (A2): <input type="number" id="bal" value="148"></label>
+        <label>Book Width (A3): <input type="number" id="baw" value="105"></label>
+        <label>Board Thickness (A4): <input type="number" id="board" value="2"></label>
+        <button onclick="calculate()">Generate Layout</button>
+        <canvas id="diagram" width="800" height="800"></canvas>
     </div>
 
     <script>
         function calculate() {
-            const A1 = parseFloat(document.getElementById('bah').value);
-            const A2 = parseFloat(document.getElementById('bal').value);
-            const A3 = parseFloat(document.getElementById('baw').value);
-            const A4 = parseFloat(document.getElementById('board').value);
+            const A1 = parseFloat(document.getElementById('bah').value); // Book Height
+            const A2 = parseFloat(document.getElementById('bal').value); // Book Length
+            const A3 = parseFloat(document.getElementById('baw').value); // Book Width
+            const A4 = parseFloat(document.getElementById('board').value); // Board Thickness
 
             const ctx = document.getElementById('diagram').getContext('2d');
-            ctx.clearRect(0, 0, 900, 600);
+            ctx.clearRect(0, 0, 800, 800); // Clear canvas
             ctx.font = "14px Arial";
             ctx.fillStyle = "black";
 
-            // Auto-scale to fit within the canvas
-            const scale = Math.min(600 / (A2 + 150), 400 / (A1 + 150), 1);
+            const scale = Math.min(500 / (A2 + 100), 350 / (A1 + 100), 1);
 
             function drawRect(x, y, width, height, label) {
                 ctx.strokeRect(x, y, width * scale, height * scale);
@@ -56,23 +43,22 @@
 
             let xStart = 50, yStart = 50;
 
-            // Bottom Tray
-            drawRect(xStart, yStart, A2, A3, "BT1"); // Bottom Panel
-            drawRect(xStart + (A2 + 20) * scale, yStart, A1, A3, "BT3"); // Long Side
-            drawRect(xStart, yStart + (A3 + 20) * scale, A2, A1, "BT2"); // Short Side
+            // **Bottom Tray (BT)**
+            drawRect(xStart, yStart, A3, A1 + A4, "BT2"); // Short Side
+            drawRect(xStart, yStart + (A1 + A4 + 20) * scale, A3, A2, "BT1"); // Flat Base
+            drawRect(xStart + (A3 + 20) * scale, yStart + (A1 + A4 + 20) * scale, A2 + 2 * A4, A1 + A4, "BT3"); // Long Side
 
-            // Top Tray (next to Bottom Tray)
-            let xOffset = xStart + (A2 + A1 + 80) * scale;
-            drawRect(xOffset, yStart, A2 + 2 * A4, A3 + 2 * A4, "TT1"); // Bottom Panel
-            drawRect(xOffset + (A2 + 2 * A4 + 20) * scale, yStart, A1 + 2 * A4, A3 + 2 * A4, "TT3"); // Long Side
-            drawRect(xOffset, yStart + (A3 + 2 * A4 + 20) * scale, A2 + 2 * A4, A1 + 2 * A4, "TT2"); // Short Side
+            // **Top Tray (TT) - Below BT**
+            let yTTStart = yStart + (A1 + A4 + A2 + 60) * scale;
+            drawRect(xStart, yTTStart, A3 + 2 * A4, A1 + 2 * A4, "TT2"); // Short Side
+            drawRect(xStart, yTTStart + (A1 + 2 * A4 + 20) * scale, A3 + 2 * A4, A2 + 2 * A4, "TT1"); // Flat Base
+            drawRect(xStart + (A3 + 2 * A4 + 20) * scale, yTTStart + (A1 + 2 * A4 + 20) * scale, A2 + 4 * A4, A1 + 2 * A4, "TT3"); // Long Side
 
-            // Cover & Spine (below trays)
-            let coverX = xStart, coverY = yStart + (A3 + A1 + 120) * scale;
-            drawRect(coverX, coverY, A2 + 2 * A4 + 1, A3 + 2 * A4 + 1, "C"); // Cover
-            drawRect(coverX + (A2 + 2 * A4 + 50) * scale, coverY, A1 + 2 * A4, A2 + 2 * A4, "CS"); // Spine
+            // **Cover Section (Below TT)**
+            let yCoverStart = yTTStart + (A1 + 2 * A4 + A2 + 80) * scale;
+            drawRect(xStart, yCoverStart, A1 + 2 * A4, A2 + 2 * A4, "CS"); // Spine
+            drawRect(xStart, yCoverStart + (A1 + 2 * A4 + 20) * scale, A2 + 2 * A4, A3 + 2 * A4, "C"); // Cover (Fixed)
         }
     </script>
-
 </body>
 </html>
