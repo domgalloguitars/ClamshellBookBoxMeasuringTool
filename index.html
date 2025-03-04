@@ -19,16 +19,16 @@
     <h1>Clamshell Box Calculator</h1>
     <div class="container">
         <div class="input-group">
-            <label>Book Height:</label> <input type="number" id="bah" value="200"> <span class="unit">mm</span>
+            <label>Book Height:</label> <input type="number" id="bah" value="15"> <span class="unit">mm</span>
         </div>
         <div class="input-group">
-            <label>Book Length:</label> <input type="number" id="bal" value="150"> <span class="unit">mm</span>
+            <label>Book Length:</label> <input type="number" id="bal" value="148"> <span class="unit">mm</span>
         </div>
         <div class="input-group">
-            <label>Book Width:</label> <input type="number" id="baw" value="50"> <span class="unit">mm</span>
+            <label>Book Width:</label> <input type="number" id="baw" value="105"> <span class="unit">mm</span>
         </div>
         <div class="input-group">
-            <label>Board Thickness:</label> <input type="number" id="board" value="3"> <span class="unit">mm</span>
+            <label>Board Thickness:</label> <input type="number" id="board" value="2"> <span class="unit">mm</span>
         </div>
         <button onclick="calculate()">Generate Diagram</button>
         <canvas id="diagram" width="900" height="600"></canvas>
@@ -36,18 +36,18 @@
 
     <script>
         function calculate() {
-            const bah = parseFloat(document.getElementById('bah').value);
-            const bal = parseFloat(document.getElementById('bal').value);
-            const baw = parseFloat(document.getElementById('baw').value);
-            const board = parseFloat(document.getElementById('board').value);
+            const A1 = parseFloat(document.getElementById('bah').value);
+            const A2 = parseFloat(document.getElementById('bal').value);
+            const A3 = parseFloat(document.getElementById('baw').value);
+            const A4 = parseFloat(document.getElementById('board').value);
 
             const ctx = document.getElementById('diagram').getContext('2d');
             ctx.clearRect(0, 0, 900, 600);
             ctx.font = "14px Arial";
             ctx.fillStyle = "black";
 
-            // Auto-scale to fit inside canvas
-            const scale = Math.min(700 / (bal + 100), 400 / (bah + 100), 1);
+            // Auto-scale if dimensions are too large
+            const scale = Math.min(500 / (A2 + 100), 350 / (A1 + 100), 1);
 
             function drawRect(x, y, width, height, label) {
                 ctx.strokeRect(x, y, width * scale, height * scale);
@@ -56,23 +56,21 @@
 
             let xStart = 50, yStart = 50;
 
-            // Bottom Tray (Left Side)
-            drawRect(xStart, yStart, bah + board, bal, "BT3"); // Long side (rotated)
-            drawRect(xStart, yStart + (bal + 20) * scale, baw, bal, "BT1"); // Base (rotated)
-            drawRect(xStart + (bah + board + 20) * scale, yStart, bah + board, baw, "BT2"); // Short side (rotated)
+            // Bottom Tray (left side)
+            drawRect(xStart, yStart, A1 + A4, A2 + 2 * A4, "BT3"); // Long side (rotated)
+            drawRect(xStart, yStart + (A2 + 2 * A4 + 20) * scale, A1 + A4, A3, "BT2"); // Short side (rotated)
+            drawRect(xStart + (A1 + A4 + 20) * scale, yStart + (A2 + 2 * A4 + 20) * scale, A2, A3, "BT1"); // Flat base (rotated)
 
-            // Top Tray (Below Bottom Tray)
-            let yOffset = yStart + (bal + bah + board + 60) * scale;
-            drawRect(xStart, yOffset, bah + board, bal + 2 * board, "TT3"); // Long side (rotated)
-            drawRect(xStart, yOffset + (bal + 20) * scale, baw + 2 * board, bal + 2 * board, "TT1"); // Base (rotated)
-            drawRect(xStart + (bah + board + 20) * scale, yOffset, bah + board, baw + 2 * board, "TT2"); // Short side (rotated)
+            // Top Tray (below Bottom Tray)
+            let xOffset = xStart + (A1 + A4 + 100) * scale;
+            drawRect(xOffset, yStart, A1 + 2 * A4, A2 + 4 * A4, "TT3"); // Long side (rotated)
+            drawRect(xOffset, yStart + (A2 + 4 * A4 + 20) * scale, A1 + 2 * A4, A3 + 2 * A4, "TT2"); // Short side (rotated)
+            drawRect(xOffset + (A1 + 2 * A4 + 20) * scale, yStart + (A2 + 4 * A4 + 20) * scale, A2 + 2 * A4, A3 + 2 * A4, "TT1"); // Flat base (rotated)
 
-            // Cover (Right Side)
-            let coverX = xStart + (bah + bal + 150) * scale, coverY = yStart + 50;
-            drawRect(coverX, coverY, bal + 2 * board, baw + 2 * board, "C"); // Cover
-
-            // Spine (Above Cover)
-            drawRect(coverX, coverY - (bah + 60) * scale, bal + 2 * board, bah + 2 * board, "CS"); // Spine
+            // Cover pieces (right side)
+            let coverX = xOffset + (A1 + 2 * A4 + 100) * scale, coverY = yStart;
+            drawRect(coverX, coverY, A2 + 2 * A4 + 1, A3 + 2 * A4 + 1, "C"); // Cover (rotated)
+            drawRect(coverX, coverY - (A1 + 2 * A4 + 20) * scale, A2 + 2 * A4, A1 + 2 * A4, "CS"); // Spine (rotated)
         }
     </script>
 
