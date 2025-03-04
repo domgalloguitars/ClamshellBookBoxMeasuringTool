@@ -46,31 +46,31 @@
             ctx.font = "14px Arial";
             ctx.fillStyle = "black";
 
-            // Auto-scale if dimensions are too large
-            const scale = Math.min(500 / (A2 + 100), 350 / (A1 + 100), 1);
+            // Auto-scale to fit within the canvas
+            const scale = Math.min(600 / (A2 + 150), 400 / (A1 + 150), 1);
 
             function drawRect(x, y, width, height, label) {
                 ctx.strokeRect(x, y, width * scale, height * scale);
-                ctx.fillText(`${label}: ${width} x ${height} mm`, x, y - 5);
+                ctx.fillText(`${label}: ${width} x ${height} mm`, x + 5, y + 15);
             }
 
             let xStart = 50, yStart = 50;
 
-            // Bottom Tray (left side)
-            drawRect(xStart, yStart, A1 + A4, A2 + 2 * A4, "BT3"); // Long side (rotated)
-            drawRect(xStart, yStart + (A2 + 2 * A4 + 20) * scale, A1 + A4, A3, "BT2"); // Short side (rotated)
-            drawRect(xStart + (A1 + A4 + 20) * scale, yStart + (A2 + 2 * A4 + 20) * scale, A2, A3, "BT1"); // Flat base (rotated)
+            // Bottom Tray
+            drawRect(xStart, yStart, A2, A3, "BT1"); // Bottom Panel
+            drawRect(xStart + (A2 + 20) * scale, yStart, A1, A3, "BT3"); // Long Side
+            drawRect(xStart, yStart + (A3 + 20) * scale, A2, A1, "BT2"); // Short Side
 
-            // Top Tray (below Bottom Tray)
-            let xOffset = xStart + (A1 + A4 + 100) * scale;
-            drawRect(xOffset, yStart, A1 + 2 * A4, A2 + 4 * A4, "TT3"); // Long side (rotated)
-            drawRect(xOffset, yStart + (A2 + 4 * A4 + 20) * scale, A1 + 2 * A4, A3 + 2 * A4, "TT2"); // Short side (rotated)
-            drawRect(xOffset + (A1 + 2 * A4 + 20) * scale, yStart + (A2 + 4 * A4 + 20) * scale, A2 + 2 * A4, A3 + 2 * A4, "TT1"); // Flat base (rotated)
+            // Top Tray (next to Bottom Tray)
+            let xOffset = xStart + (A2 + A1 + 80) * scale;
+            drawRect(xOffset, yStart, A2 + 2 * A4, A3 + 2 * A4, "TT1"); // Bottom Panel
+            drawRect(xOffset + (A2 + 2 * A4 + 20) * scale, yStart, A1 + 2 * A4, A3 + 2 * A4, "TT3"); // Long Side
+            drawRect(xOffset, yStart + (A3 + 2 * A4 + 20) * scale, A2 + 2 * A4, A1 + 2 * A4, "TT2"); // Short Side
 
-            // Cover pieces (right side)
-            let coverX = xOffset + (A1 + 2 * A4 + 100) * scale, coverY = yStart;
-            drawRect(coverX, coverY, A2 + 2 * A4 + 1, A3 + 2 * A4 + 1, "C"); // Cover (rotated)
-            drawRect(coverX, coverY - (A1 + 2 * A4 + 20) * scale, A2 + 2 * A4, A1 + 2 * A4, "CS"); // Spine (rotated)
+            // Cover & Spine (below trays)
+            let coverX = xStart, coverY = yStart + (A3 + A1 + 120) * scale;
+            drawRect(coverX, coverY, A2 + 2 * A4 + 1, A3 + 2 * A4 + 1, "C"); // Cover
+            drawRect(coverX + (A2 + 2 * A4 + 50) * scale, coverY, A1 + 2 * A4, A2 + 2 * A4, "CS"); // Spine
         }
     </script>
 
