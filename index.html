@@ -19,13 +19,13 @@
     <h1>Clamshell Box Calculator</h1>
     <div class="container">
         <div class="input-group">
-            <label>Book Height:</label> <input type="number" id="bah" value="16"> <span class="unit">mm</span>
+            <label>Book Height:</label> <input type="number" id="bah" value="15"> <span class="unit">mm</span>
         </div>
         <div class="input-group">
-            <label>Book Length:</label> <input type="number" id="bal" value="150"> <span class="unit">mm</span>
+            <label>Book Length:</label> <input type="number" id="bal" value="148"> <span class="unit">mm</span>
         </div>
         <div class="input-group">
-            <label>Book Width:</label> <input type="number" id="baw" value="50"> <span class="unit">mm</span>
+            <label>Book Width:</label> <input type="number" id="baw" value="105"> <span class="unit">mm</span>
         </div>
         <div class="input-group">
             <label>Board Thickness:</label> <input type="number" id="board" value="2"> <span class="unit">mm</span>
@@ -59,22 +59,9 @@
             // Bottom Tray (Left Side)
             drawRect(xStart, yStart, bal, bah + board, "BT3"); // Long side (swapped with BT2)
             drawRect(xStart, yStart + (bah + board + 20) * scale, bal, baw, "BT1"); // **Rotated Flat Base**
-            drawRect(xStart + (bal + 20) * scale, yStart, baw, bah + board, "BT2"); // Short side (swapped with BT3)
+            drawRect(xStart + (bal + 20) * scale, yStart, bah + board, baw, "BT2"); // **Rotated Short Side**
 
             // Top Tray (Below Bottom Tray)
             let yOffset = yStart + (bal + bah + board + 60) * scale;
             drawRect(xStart, yOffset, bal, bah + board, "TT3"); // Long side (swapped with TT2)
-            drawRect(xStart, yOffset + (bah + board + 20) * scale, bal, baw, "TT1"); // **Rotated Flat Base**
-            drawRect(xStart + (bal + 20) * scale, yOffset, baw, bah + board, "TT2"); // Short side (swapped with TT3)
-
-            // Cover (Right Side)
-            let coverX = xStart + (bal + baw + 150) * scale, coverY = yStart + 50;
-            drawRect(coverX, coverY, bal + 2 * board, baw + 2 * board, "C"); // Cover
-
-            // Spine (Above Cover)
-            drawRect(coverX, coverY - (bah + 60) * scale, bal + 2 * board, bah + 2 * board, "CS"); // Spine (moved above cover)
-        }
-    </script>
-
-</body>
-</html>
+            drawRect(xStart, yOffset + (bah + board + 20) * scale, bal, baw, "TT1"); // 
