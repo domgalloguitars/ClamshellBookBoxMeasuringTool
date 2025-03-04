@@ -19,7 +19,7 @@
     <h1>Clamshell Box Calculator</h1>
     <div class="container">
         <div class="input-group">
-            <label>Book Height:</label> <input type="number" id="bah" value="200"> <span class="unit">mm</span>
+            <label>Book Height:</label> <input type="number" id="bah" value="16"> <span class="unit">mm</span>
         </div>
         <div class="input-group">
             <label>Book Length:</label> <input type="number" id="bal" value="150"> <span class="unit">mm</span>
@@ -28,7 +28,7 @@
             <label>Book Width:</label> <input type="number" id="baw" value="50"> <span class="unit">mm</span>
         </div>
         <div class="input-group">
-            <label>Board Thickness:</label> <input type="number" id="board" value="3"> <span class="unit">mm</span>
+            <label>Board Thickness:</label> <input type="number" id="board" value="2"> <span class="unit">mm</span>
         </div>
         <button onclick="calculate()">Generate Diagram</button>
         <canvas id="diagram" width="900" height="600"></canvas>
@@ -57,15 +57,15 @@
             let xStart = 50, yStart = 50;
 
             // Bottom Tray (Left Side)
-            drawRect(xStart, yStart, bal, bah + board, "BT3"); // Long side (now at BT2's old position)
-            drawRect(xStart, yStart + (bah + board + 20) * scale, baw, bal, "BT1"); // Flat base
-            drawRect(xStart + (bal + 20) * scale, yStart, baw, bah + board, "BT2"); // Short side (now at BT3's old position)
+            drawRect(xStart, yStart, bal, bah + board, "BT3"); // Long side (swapped with BT2)
+            drawRect(xStart, yStart + (bah + board + 20) * scale, bal, baw, "BT1"); // **Rotated Flat Base**
+            drawRect(xStart + (bal + 20) * scale, yStart, baw, bah + board, "BT2"); // Short side (swapped with BT3)
 
             // Top Tray (Below Bottom Tray)
             let yOffset = yStart + (bal + bah + board + 60) * scale;
-            drawRect(xStart, yOffset, bal, bah + board, "TT3"); // Long side (now at TT2's old position)
-            drawRect(xStart, yOffset + (bah + board + 20) * scale, baw, bal, "TT1"); // Flat base
-            drawRect(xStart + (bal + 20) * scale, yOffset, baw, bah + board, "TT2"); // Short side (now at TT3's old position)
+            drawRect(xStart, yOffset, bal, bah + board, "TT3"); // Long side (swapped with TT2)
+            drawRect(xStart, yOffset + (bah + board + 20) * scale, bal, baw, "TT1"); // **Rotated Flat Base**
+            drawRect(xStart + (bal + 20) * scale, yOffset, baw, bah + board, "TT2"); // Short side (swapped with TT3)
 
             // Cover (Right Side)
             let coverX = xStart + (bal + baw + 150) * scale, coverY = yStart + 50;
