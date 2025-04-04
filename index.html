@@ -43,10 +43,10 @@
           ctx.translate(x, y);
           ctx.rotate(-Math.PI / 2);
           ctx.strokeRect(0, 0, height * scale, width * scale);
-          ctx.fillText(label, 5, 15);
+          ctx.fillText(label + " (" + height + "x" + width + "mm)", 5, 15);
         } else {
           ctx.strokeRect(x, y, width * scale, height * scale);
-          ctx.fillText(label, x + 5, y + 15);
+          ctx.fillText(label + " (" + width + "x" + height + "mm)", x + 5, y + 15);
         }
         ctx.restore();
       }
