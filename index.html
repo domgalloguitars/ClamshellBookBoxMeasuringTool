@@ -55,10 +55,10 @@
             drawRect(xStart, yTTStart + (A1 + 2 * A4 + 20) * scale, A3 + 2 * A4, A2 + 2 * A4, "TT1"); // Flat Base
             drawRect(xStart + (A3 + 2 * A4 + 20) * scale, yTTStart + (A1 + 2 * A4 + 20) * scale, A2 + 4 * A4, A1 + 2 * A4, "TT3"); // Long Side
 
-            // **Cover Section (Below TT, Rotated)**
-            let yCoverStart = yTTStart + (A1 + 2 * A4 + A2 + 80) * scale;
+            // **Cover Section (Below TT, Rotated, Adjusted Position)**
+            let yCoverStart = yTTStart + (A1 + 2 * A4 + A2 + 60) * scale; // Moved C closer to CS
             drawRect(xStart, yCoverStart, A2 + 2 * A4, A1 + 2 * A4, "CS"); // Spine (Rotated)
-            drawRect(xStart, yCoverStart + (A2 + 2 * A4 + 20) * scale, A3 + 2 * A4, A2 + 2 * A4, "C"); // Cover (Rotated)
+            drawRect(xStart, yCoverStart + (A1 + 2 * A4 + 20) * scale, A3 + 2 * A4, A2 + 2 * A4, "C"); // Cover (Rotated)
         }
     </script>
 </body>
