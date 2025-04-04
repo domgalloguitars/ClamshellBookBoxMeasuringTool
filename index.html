@@ -38,17 +38,17 @@
       const scale = Math.min(500 / (A2 + 100), 350 / (A1 + 100), 1);
 
       function drawRect(x, y, width, height, label, rotate = false) {
+        ctx.save();
         if (rotate) {
-          ctx.save();
           ctx.translate(x, y);
           ctx.rotate(-Math.PI / 2);
           ctx.strokeRect(0, 0, height * scale, width * scale);
-          ctx.fillText(`${label}`, 5, 15);
-          ctx.restore();
+          ctx.fillText(label, 5, 15);
         } else {
           ctx.strokeRect(x, y, width * scale, height * scale);
-          ctx.fillText(`${label}`, x + 5, y + 15);
+          ctx.fillText(label, x + 5, y + 15);
         }
+        ctx.restore();
       }
 
       let xStart = 50, yStart = 50;
@@ -64,9 +64,9 @@
       drawRect(xStart, yTTStart + (A1 + 2 * A4 + 20) * scale, A3 + 2 * A4, A2 + 2 * A4, "TT1");
       drawRect(xStart + (A3 + 2 * A4 + 20) * scale, yTTStart + (A1 + 2 * A4 + 20) * scale, A1 + 2 * A4, A2 + 4 * A4, "TT3", true);
 
-      // Cover Section (aligned to the right, rotated, only one C)
+      // Cover Section (rotated 90 degrees, aligned top with BT1/TT1)
       let xCoverStart = xStart + (A3 + 2 * A4 + 80) * scale;
-      let yCoverAlign = yStart + (A1 + A4 + 20) * scale; // same top as BT1
+      let yCoverAlign = yStart + (A1 + A4 + 20) * scale;
 
       drawRect(xCoverStart, yCoverAlign, A2 + 2 * A4, A3 + 2 * A4, "C", true);
       drawRect(xCoverStart + (A3 + 2 * A4 + 20) * scale, yCoverAlign, A2 + 2 * A4, A1 + 2 * A4, "CS", true);
