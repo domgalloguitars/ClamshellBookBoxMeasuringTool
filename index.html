@@ -25,13 +25,13 @@
 
     <script>
         function calculate() {
-            const A1 = parseFloat(document.getElementById('bah').value); // Book Height
-            const A2 = parseFloat(document.getElementById('bal').value); // Book Length
-            const A3 = parseFloat(document.getElementById('baw').value); // Book Width
-            const A4 = parseFloat(document.getElementById('board').value); // Board Thickness
+            const A1 = parseFloat(document.getElementById('bah').value);
+            const A2 = parseFloat(document.getElementById('bal').value);
+            const A3 = parseFloat(document.getElementById('baw').value);
+            const A4 = parseFloat(document.getElementById('board').value);
 
             const ctx = document.getElementById('diagram').getContext('2d');
-            ctx.clearRect(0, 0, 1000, 800); // Clear canvas
+            ctx.clearRect(0, 0, 1000, 800);
             ctx.font = "14px Arial";
             ctx.fillStyle = "black";
 
@@ -44,26 +44,27 @@
 
             let xStart = 50, yStart = 50;
 
-            // Bottom Tray (BT)
-            drawRect(xStart, yStart, A3, A1 + A4, "BT2"); // Short Side
-            drawRect(xStart, yStart + (A1 + A4 + 20) * scale, A3, A2, "BT1"); // Flat Base
-            drawRect(xStart + (A3 + 20) * scale, yStart + (A1 + A4 + 20) * scale, A1 + A4, A2 + 2 * A4, "BT3"); // Long Side (rotated)
+            // Bottom Tray
+            drawRect(xStart, yStart, A3, A1 + A4, "BT2");
+            drawRect(xStart, yStart + (A1 + A4 + 20) * scale, A3, A2, "BT1");
+            drawRect(xStart + (A3 + 20) * scale, yStart + (A1 + A4 + 20) * scale, A1 + A4, A2 + 2 * A4, "BT3");
 
-            // Top Tray (TT)
+            // Top Tray
             let yTTStart = yStart + (A1 + A4 + A2 + 60) * scale;
-            drawRect(xStart, yTTStart, A3 + 2 * A4, A1 + 2 * A4, "TT2"); // Short Side
-            drawRect(xStart, yTTStart + (A1 + 2 * A4 + 20) * scale, A3 + 2 * A4, A2 + 2 * A4, "TT1"); // Flat Base
-            drawRect(xStart + (A3 + 2 * A4 + 20) * scale, yTTStart + (A1 + 2 * A4 + 20) * scale, A1 + 2 * A4, A2 + 4 * A4, "TT3"); // Long Side (rotated)
+            drawRect(xStart, yTTStart, A3 + 2 * A4, A1 + 2 * A4, "TT2");
+            drawRect(xStart, yTTStart + (A1 + 2 * A4 + 20) * scale, A3 + 2 * A4, A2 + 2 * A4, "TT1");
+            drawRect(xStart + (A3 + 2 * A4 + 20) * scale, yTTStart + (A1 + 2 * A4 + 20) * scale, A1 + 2 * A4, A2 + 4 * A4, "TT3");
 
-            // Cover Section
-            let coverTopY = yTTStart + (A1 + 2 * A4 + A2 + 80) * scale;
+            // Cover Section: ROTATED and realigned C and CS
+            let topAlignY = yStart + (A1 + A4 + 20) * scale;
 
-            // Rotated C (cover)
-            drawRect(xStart, coverTopY, A1 + 2 * A4, A2 + 2 * A4, "C");
+            // Keep original C, now rotated 90 degrees and aligned to top
+            const cX = xStart + (A3 + 20 + A1 + A4 + 20) * scale;
+            drawRect(cX, yStart, A1 + 2 * A4, A2 + 2 * A4, "C");
 
-            // Rotated CS (spine), placed to the right of C
-            const csX = xStart + (A1 + 2 * A4 + 20) * scale;
-            drawRect(csX, coverTopY, A1 + 2 * A4, A2 + 2 * A4, "CS");
+            // CS, also rotated and placed next to C
+            const csX = cX + (A1 + 2 * A4 + 20) * scale;
+            drawRect(csX, yStart, A1 + 2 * A4, A2 + 2 * A4, "CS");
         }
     </script>
 </body>
