@@ -47,23 +47,23 @@
             // Bottom Tray (BT)
             drawRect(xStart, yStart, A3, A1 + A4, "BT2"); // Short Side
             drawRect(xStart, yStart + (A1 + A4 + 20) * scale, A3, A2, "BT1"); // Flat Base
-            drawRect(xStart + (A3 + 20) * scale, yStart + (A1 + A4 + 20) * scale, A1 + A4, A2 + 2 * A4, "BT3"); // Long Side, rotated
+            drawRect(xStart + (A3 + 20) * scale, yStart + (A1 + A4 + 20) * scale, A1 + A4, A2 + 2 * A4, "BT3"); // Long Side (rotated)
 
             // Top Tray (TT)
             let yTTStart = yStart + (A1 + A4 + A2 + 60) * scale;
             drawRect(xStart, yTTStart, A3 + 2 * A4, A1 + 2 * A4, "TT2"); // Short Side
             drawRect(xStart, yTTStart + (A1 + 2 * A4 + 20) * scale, A3 + 2 * A4, A2 + 2 * A4, "TT1"); // Flat Base
-            drawRect(xStart + (A3 + 2 * A4 + 20) * scale, yTTStart + (A1 + 2 * A4 + 20) * scale, A1 + 2 * A4, A2 + 4 * A4, "TT3"); // Long Side, rotated
+            drawRect(xStart + (A3 + 2 * A4 + 20) * scale, yTTStart + (A1 + 2 * A4 + 20) * scale, A1 + 2 * A4, A2 + 4 * A4, "TT3"); // Long Side (rotated)
 
             // Cover Section
-            let yCoverStart = yTTStart + (A1 + 2 * A4 + A2 + 80) * scale;
-            drawRect(xStart, yCoverStart, A1 + 2 * A4, A2 + 2 * A4, "CS"); // Spine, now rotated
-            drawRect(xStart, yCoverStart + (A1 + 2 * A4 + 20) * scale, A2 + 2 * A4, A3 + 2 * A4, "C"); // Cover (Fixed)
+            let coverTopY = yTTStart + (A1 + 2 * A4 + A2 + 80) * scale;
 
-            // Adjusted CS position to be off to the right, aligned top with C
-            const cYTop = yCoverStart + (A1 + 2 * A4 + 20) * scale;
-            const csX = xStart + (A2 + 2 * A4 + 40) * scale;
-            drawRect(csX, cYTop, A2 + 2 * A4, A1 + 2 * A4, "CS"); // CS rotated, right of C
+            // Rotated C (cover)
+            drawRect(xStart, coverTopY, A1 + 2 * A4, A2 + 2 * A4, "C");
+
+            // Rotated CS (spine), placed to the right of C
+            const csX = xStart + (A1 + 2 * A4 + 20) * scale;
+            drawRect(csX, coverTopY, A1 + 2 * A4, A2 + 2 * A4, "CS");
         }
     </script>
 </body>
