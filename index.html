@@ -1,71 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Book Box Layout</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .container { display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
-        label, input { margin: 5px; }
-        canvas { border: 1px solid black; margin-top: 20px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Box Layout</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .container { display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
+    label, input { margin: 5px; }
+    canvas { border: 1px solid black; margin-top: 20px; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Book Box Layout Calculator</h2>
-        <p>All measurements given in millimeters.</p>
-        <label>Book Height (A1): <input type="number" id="bah" value="15"></label>
-        <label>Book Length (A2): <input type="number" id="bal" value="148"></label>
-        <label>Book Width (A3): <input type="number" id="baw" value="105"></label>
-        <label>Board Thickness (A4): <input type="number" id="board" value="2"></label>
-        <button onclick="calculate()">Generate Layout</button>
-        <canvas id="diagram" width="1000" height="800"></canvas>
-    </div>
+  <div class="container">
+    <h2>Book Box Layout Calculator</h2>
+    <p>All measurements given in millimeters.</p>
+    <label>Book Height (A1): <input type="number" id="bah" value="15"></label>
+    <label>Book Length (A2): <input type="number" id="bal" value="148"></label>
+    <label>Book Width (A3): <input type="number" id="baw" value="105"></label>
+    <label>Board Thickness (A4): <input type="number" id="board" value="2"></label>
+    <button onclick="calculate()">Generate Layout</button>
+    <canvas id="diagram" width="1000" height="1000"></canvas>
+  </div>
 
-    <script>
-        function calculate() {
-            const A1 = parseFloat(document.getElementById('bah').value);
-            const A2 = parseFloat(document.getElementById('bal').value);
-            const A3 = parseFloat(document.getElementById('baw').value);
-            const A4 = parseFloat(document.getElementById('board').value);
+  <script>
+    function calculate() {
+      const A1 = parseFloat(document.getElementById('bah').value);
+      const A2 = parseFloat(document.getElementById('bal').value);
+      const A3 = parseFloat(document.getElementById('baw').value);
+      const A4 = parseFloat(document.getElementById('board').value);
 
-            const ctx = document.getElementById('diagram').getContext('2d');
-            ctx.clearRect(0, 0, 1000, 800);
-            ctx.font = "14px Arial";
-            ctx.fillStyle = "black";
+      const ctx = document.getElementById('diagram').getContext('2d');
+      ctx.clearRect(0, 0, 1000, 1000);
+      ctx.font = "14px Arial";
+      ctx.fillStyle = "black";
 
-            const scale = Math.min(600 / (A2 + 200), 350 / (A1 + 200), 1);
+      const scale = Math.min(500 / (A2 + 100), 350 / (A1 + 100), 1);
 
-            function drawRect(x, y, width, height, label) {
-                ctx.strokeRect(x, y, width * scale, height * scale);
-                ctx.fillText(`${label}: ${width} x ${height}`, x + 5, y + 15);
-            }
-
-            let xStart = 50, yStart = 50;
-
-            // Bottom Tray
-            drawRect(xStart, yStart, A3, A1 + A4, "BT2");
-            drawRect(xStart, yStart + (A1 + A4 + 20) * scale, A3, A2, "BT1");
-            drawRect(xStart + (A3 + 20) * scale, yStart + (A1 + A4 + 20) * scale, A1 + A4, A2 + 2 * A4, "BT3");
-
-            // Top Tray
-            let yTTStart = yStart + (A1 + A4 + A2 + 60) * scale;
-            drawRect(xStart, yTTStart, A3 + 2 * A4, A1 + 2 * A4, "TT2");
-            drawRect(xStart, yTTStart + (A1 + 2 * A4 + 20) * scale, A3 + 2 * A4, A2 + 2 * A4, "TT1");
-            drawRect(xStart + (A3 + 2 * A4 + 20) * scale, yTTStart + (A1 + 2 * A4 + 20) * scale, A1 + 2 * A4, A2 + 4 * A4, "TT3");
-
-            // Cover Section: ROTATED and realigned C and CS
-            let topAlignY = yStart + (A1 + A4 + 20) * scale;
-
-            // Keep original C, now rotated 90 degrees and aligned to top
-            const cX = xStart + (A3 + 20 + A1 + A4 + 20) * scale;
-            drawRect(cX, yStart, A1 + 2 * A4, A2 + 2 * A4, "C");
-
-            // CS, also rotated and placed next to C
-            const csX = cX + (A1 + 2 * A4 + 20) * scale;
-            drawRect(csX, yStart, A1 + 2 * A4, A2 + 2 * A4, "CS");
+      function drawRect(x, y, width, height, label, rotate = false) {
+        if (rotate) {
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(-Math.PI / 2);
+          ctx.strokeRect(0, 0, height * scale, width * scale);
+          ctx.fillText(`${label}`, 5, 15);
+          ctx.restore();
+        } else {
+          ctx.strokeRect(x, y, width * scale, height * scale);
+          ctx.fillText(`${label}`, x + 5, y + 15);
         }
-    </script>
+      }
+
+      let xStart = 50, yStart = 50;
+
+      // Bottom Tray
+      drawRect(xStart, yStart, A3, A1 + A4, "BT2");
+      drawRect(xStart, yStart + (A1 + A4 + 20) * scale, A3, A2, "BT1");
+      drawRect(xStart + (A3 + 20) * scale, yStart + (A1 + A4 + 20) * scale, A1 + A4, A2 + 2 * A4, "BT3", true);
+
+      // Top Tray
+      let yTTStart = yStart + (A1 + A4 + A2 + 60) * scale;
+      drawRect(xStart, yTTStart, A3 + 2 * A4, A1 + 2 * A4, "TT2");
+      drawRect(xStart, yTTStart + (A1 + 2 * A4 + 20) * scale, A3 + 2 * A4, A2 + 2 * A4, "TT1");
+      drawRect(xStart + (A3 + 2 * A4 + 20) * scale, yTTStart + (A1 + 2 * A4 + 20) * scale, A1 + 2 * A4, A2 + 4 * A4, "TT3", true);
+
+      // Cover Section (aligned to the right, rotated, only one C)
+      let xCoverStart = xStart + (A3 + 2 * A4 + 80) * scale;
+      let yCoverAlign = yStart + (A1 + A4 + 20) * scale; // same top as BT1
+
+      drawRect(xCoverStart, yCoverAlign, A2 + 2 * A4, A3 + 2 * A4, "C", true);
+      drawRect(xCoverStart + (A3 + 2 * A4 + 20) * scale, yCoverAlign, A2 + 2 * A4, A1 + 2 * A4, "CS", true);
+    }
+  </script>
 </body>
 </html>
