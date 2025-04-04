@@ -14,6 +14,7 @@
 <body>
     <div class="container">
         <h2>Book Box Layout Calculator</h2>
+        <p>All measurements given in millimeters.</p>
         <label>Book Height (A1): <input type="number" id="bah" value="15"></label>
         <label>Book Length (A2): <input type="number" id="bal" value="148"></label>
         <label>Book Width (A3): <input type="number" id="baw" value="105"></label>
@@ -38,7 +39,7 @@
 
             function drawRect(x, y, width, height, label) {
                 ctx.strokeRect(x, y, width * scale, height * scale);
-                ctx.fillText(`${label}: ${width} x ${height} mm`, x + 5, y + 15);
+                ctx.fillText(`${label}: ${width} x ${height}`, x + 5, y + 15);
             }
 
             let xStart = 50, yStart = 50;
@@ -54,10 +55,10 @@
             drawRect(xStart, yTTStart + (A1 + 2 * A4 + 20) * scale, A3 + 2 * A4, A2 + 2 * A4, "TT1"); // Flat Base
             drawRect(xStart + (A3 + 2 * A4 + 20) * scale, yTTStart + (A1 + 2 * A4 + 20) * scale, A2 + 4 * A4, A1 + 2 * A4, "TT3"); // Long Side
 
-            // **Cover Section (Below TT)**
+            // **Cover Section (Below TT, Rotated)**
             let yCoverStart = yTTStart + (A1 + 2 * A4 + A2 + 80) * scale;
-            drawRect(xStart, yCoverStart, A1 + 2 * A4, A2 + 2 * A4, "CS"); // Spine
-            drawRect(xStart, yCoverStart + (A1 + 2 * A4 + 20) * scale, A2 + 2 * A4, A3 + 2 * A4, "C"); // Cover (Fixed)
+            drawRect(xStart, yCoverStart, A2 + 2 * A4, A1 + 2 * A4, "CS"); // Spine (Rotated)
+            drawRect(xStart, yCoverStart + (A2 + 2 * A4 + 20) * scale, A3 + 2 * A4, A2 + 2 * A4, "C"); // Cover (Rotated)
         }
     </script>
 </body>
